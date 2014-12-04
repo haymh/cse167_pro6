@@ -5,12 +5,9 @@
 #include "Vector4d.h"
 #include "Camera.h"
 #include "Group.h"
-#include "Node.h"
 #include "MatrixTransform.h"
-#include "Cube.h"
-#include "Sphere.h"
-#include "FrustumCulling.h"
-#include "parser.h"
+#include "BezierPatch.h"
+#include "Texture.h"
 
 
 class Window	  // OpenGL output window related routines
@@ -30,18 +27,13 @@ class Window	  // OpenGL output window related routines
 
 private :
 	static MatrixTransform* root; 
-	static MatrixTransform* bunny;
-	static MatrixTransform* dragon;
-	static MatrixTransform* bear;
-	static MatrixTransform* spotL;
-	static MatrixTransform* pointL;
-	static MatrixTransform* scaling_mt;
-	static MatrixTransform* rotate_mt;
-	static FrustumCulling fc;
-
-	static Matrix4d calculateScalingMatrix(int w, int h, Coordinate3d min, Coordinate3d max);
+	static MatrixTransform* ocean;
+	static MatrixTransform * scaling_mt;
+	static MatrixTransform * rotate_mt;
+	static BezierPatch * bp;
 	static Vector3d trackBallMapping(int x, int y);
-
+	static Shader * skyShader;
+	
 };
 
 #endif

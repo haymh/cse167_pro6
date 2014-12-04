@@ -3,6 +3,9 @@
 
 #include "GL/glut.h"
 #include "Vector3d.h"
+#include "Matrix4d.h"
+
+class Matrix4d;
 
 class Vector4d
 {
@@ -16,6 +19,8 @@ public:
 	void set(int index, GLdouble value);
 	GLdouble get(int index);
 	Vector4d& operator=(Vector4d&);
+	Vector4d operator*(Matrix4d&);
+	double operator*(Vector4d&);
 	GLdouble operator[](int index);
 	Vector4d operator+(Vector4d & another);
 	void add(Vector4d & another);

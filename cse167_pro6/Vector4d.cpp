@@ -30,6 +30,18 @@ GLdouble Vector4d::get(int index){
 	return v[index];
 }
 
+Vector4d Vector4d::operator*(Matrix4d& m){
+	double x = v[0] * m.get(0, 0) + v[1] * m.get(0, 1) + v[2] * m.get(0, 2) + v[3] * m.get(0, 3);
+	double y = v[0] * m.get(1, 0) + v[1] * m.get(1, 1) + v[2] * m.get(1, 2) + v[3] * m.get(1, 3);
+	double z = v[0] * m.get(2, 0) + v[1] * m.get(2, 1) + v[2] * m.get(2, 2) + v[3] * m.get(2, 3);
+	double w = v[0] * m.get(3, 0) + v[1] * m.get(3, 1) + v[2] * m.get(3, 2) + v[3] * m.get(3, 3);
+	return Vector4d(x, y, z, w);
+}
+
+double Vector4d::operator*(Vector4d& o){
+	return v[0] * o[0] + v[1] * o[1] + v[2] * o[2] + v[3] * o[3];
+}
+
 GLdouble Vector4d::operator[](int index){
 	return v[index];
 }
