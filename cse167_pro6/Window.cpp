@@ -126,7 +126,7 @@ void Window::init(){
 	char* right = "texture/sdbmp/txStormydays_right.bmp";
 	char* top = "texture/sdbmp/txStormydays_up.bmp";
 	char* bottom = NULL;
-	skybox->loadSkybox(front, back, top, bottom, left, right);
+	//skybox->loadSkybox(front, back, top, bottom, left, right);
 	/*
 	skybox->loadFace(FRONT, front);
 	skybox->loadFace(BACK, back);
@@ -134,6 +134,7 @@ void Window::init(){
 	skybox->loadFace(RIGHT, right);
 	skybox->loadFace(TOP, top);
 	*/
+	skybox->loadFace(FRONT, front);
 	t.makeTranslate(0, 7, 0);
 	MatrixTransform * sky_mt = new MatrixTransform(t);
 	sky_mt->addChild(skybox);

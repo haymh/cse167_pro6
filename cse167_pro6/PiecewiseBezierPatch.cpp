@@ -36,7 +36,11 @@ Bs PiecewiseBezierPatch::update(){
 void PiecewiseBezierPatch::setCP(int u, int v, Vector3d c){
 	if (u < 0 || u > 3 * w || v < 0 || v > 3 * h)
 		return;
-	int x = u / 3
+	int x = u / 3;
+	int x_where = u % 3;
+	int y = v / 3;
+	int y_where = v % 3;
+	//BezierPatch * work = 
 }
 
 void PiecewiseBezierPatch::render(){

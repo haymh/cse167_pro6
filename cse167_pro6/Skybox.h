@@ -26,6 +26,7 @@ private :
 	void render();
 	void render1();
 	void render2();
+	void render3();
 	Shader *shader;
 	GLuint vao;
 };

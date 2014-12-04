@@ -65,6 +65,7 @@ Skybox::Skybox(double radius){
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	shader = new Shader("shaders/skybox.vert", "shaders/skybox.frag");
 }
 
 void Skybox::loadFace(face f, char* filename){
@@ -114,7 +115,7 @@ void Skybox::loadSkybox(const char* front,
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	skyID = texture;
-	shader = new Shader("shaders/skybox.vert", "shaders/skybox.frag");
+	
 }
 
 Bs Skybox::update(){
@@ -261,7 +262,27 @@ void Skybox::render2(){
 	
 }
 
+void Skybox::render3(){
+	GLint texLoc;
+	shader->bind();
+	texLoc = glGetUniformLocation(shader->pid, "Texture0");
+	glUniform1i(texLoc, 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, faceID[FRONT]);
+	glBindTexture(GL_TEXTURE_2D, faceID[FRONT]);
+	
+	glBegin(GL_QUADS);
+	//glBindTexture(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, skyID);
+	glTexCoord2f(0, 0); glVertex3f(+D, -D, -D);
+	glTexCoord2f(1, 0); glVertex3f(+D, -D, +D);
+	glTexCoord2f(1, 1); glVertex3f(+D, +D, +D);
+	glTexCoord2f(0, 1); glVertex3f(+D, +D, -D);
+	glEnd();
+	shader->unbind();
+
+}
+
 void Skybox::render(){
-	render2();
+	render3();
 }
 
