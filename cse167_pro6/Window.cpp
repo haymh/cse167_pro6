@@ -85,7 +85,7 @@ double time = 0.0;
 
 void Window::init(){
 	Matrix4d t;
-	t.makeTranslate(0, -10, 0);
+	t.makeTranslate(0, -13, 0);
 	ocean = new MatrixTransform(t);
 	material.setAmbient(m_ambient);
 	material.setDiffuse(m_diffuse);
@@ -119,29 +119,10 @@ void Window::init(){
 
 	//loading texture
 	Skybox * skybox = new Skybox(20);
-	char* front = "texture/sdbmp/txStormydays_front.bmp";
-	char* back = "texture/sdbmp/txStormydays_back.bmp";
-	char* left = "texture/sdbmp/txStormydays_left.bmp";
-	char* right = "texture/sdbmp/txStormydays_right.bmp";
-	char* top = "texture/sdbmp/txStormydays_up.bmp";
-	char* bottom = NULL;
-	//skybox->loadSkybox(front, back, top, bottom, left, right);
-	/*
-	skybox->loadFace(FRONT, front);
-	skybox->loadFace(BACK, back);
-	skybox->loadFace(LEFT, left);
-	skybox->loadFace(RIGHT, right);
-	skybox->loadFace(TOP, top);
-	*/
-	//skybox->loadFace(FRONT, front);
-	t.makeTranslate(0, 7, 0);
-	MatrixTransform * sky_mt = new MatrixTransform(t);
 	scaling_mt->addChild(skybox);
-	//scaling_mt->addChild(sky_mt);
 
-	// load shaders
-	//skyShader = new Shader("shaders/skybox.vert", "shaders/skybox.frag");
-	//skyShader->bind();
+	bp->setSkyID(skybox->getSkyID());
+	bp->useShader(true);
 }
 
 

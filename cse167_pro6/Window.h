@@ -1,12 +1,11 @@
 #ifndef _WINDOW_H_
 #define _WINDOW_H_
 
-
+#include "BezierPatch.h"
 #include "Vector4d.h"
 #include "Camera.h"
 #include "Group.h"
 #include "MatrixTransform.h"
-#include "BezierPatch.h"
 #include "Texture.h"
 
 

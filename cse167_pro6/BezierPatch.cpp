@@ -41,6 +41,7 @@ BezierPatch::BezierPatch(Vector3d p0, Vector3d p1, Vector3d p2, Vector3d p3,
 	x = xx;
 	y = yy;
 	m = ma;
+	enableShader = false;
 	setup();
 }
 
@@ -57,6 +58,7 @@ BezierPatch::BezierPatch(Vector3d * v, int xx, int yy, Material *ma){
 void BezierPatch::setCp(int index, Vector3d c){
 	cp[index] = c;
 }
+
 void BezierPatch::setup(){
 	gx = Matrix4d(cp[0][0], cp[1][0], cp[2][0], cp[3][0],
 		cp[4][0], cp[5][0], cp[6][0], cp[7][0],
@@ -73,6 +75,16 @@ void BezierPatch::setup(){
 	cx = m_bez * gx * m_bez;
 	cy = m_bez * gy * m_bez;
 	cz = m_bez * gz * m_bez;
+
+	shader = new Shader("shaders/enviroment.vert", "shaders/environment.frag");
+}
+
+void BezierPatch::setSkyID(GLuint id){
+	skyID = id;
+}
+
+void BezierPatch::useShader(bool b){
+	enableShader = b;
 }
 
 void BezierPatch::sineWave(double h, double t){
@@ -178,6 +190,12 @@ void BezierPatch::render(){
 	}
 	*/
 	///*
+	if (enableShader){
+		shader->bind();
+		glEnable(GL_TEXTURE_CUBE_MAP);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skyID);
+	}
 	glBegin(GL_QUADS);
 	for (int i = 0; i <= y - 1; i++){
 		Vector3d a = compute((i + 1) * dv, 0);
@@ -200,6 +218,11 @@ void BezierPatch::render(){
 		}
 	}
 	glEnd();
+	if (enableShader){
+		glDisable(GL_TEXTURE_CUBE_MAP);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+		shader->unbind();
+	}
 	if (glGetError() != GL_NO_ERROR)
 		cerr << "GL error" << endl;
 	//*/

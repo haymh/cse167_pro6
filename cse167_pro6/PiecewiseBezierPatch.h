@@ -1,9 +1,10 @@
 #ifndef PIECEWISEBEZIERPATCH_H_
 #define PIECEWISEBEZIERPATCH_H_
 
+#include "BezierPatch.h"
 #include "Geode.h"
 #include "Vector3d.h"
-#include "BezierPatch.h"
+
 
 class PiecewiseBezierPatch : public Geode{
 public :

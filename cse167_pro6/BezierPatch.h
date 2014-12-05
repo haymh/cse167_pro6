@@ -1,10 +1,12 @@
 #ifndef BEZIERPATCH_H_
 #define BEZIERPATCH_H_
 
+#include "shader.h"
 #include "Geode.h"
 #include "Vector3d.h"
 #include "Matrix4d.h"
 #include "Material.h"
+
 
 
 class BezierPatch : public Geode{
@@ -27,6 +29,8 @@ public :
 	Vector3d getCp(int index);
 	void setCp(int index, Vector3d cp);
 	void sineWave(double h, double t);
+	void useShader(bool b);
+	void setSkyID(GLuint id);
 private:
 	// 16 control points, p0 is the bottom left corner, p3 is the bottom right corner, p12 is the top left corner, p15 is the top right corner
 	Vector3d cp[16];
@@ -38,8 +42,12 @@ private:
 	Material * m;
 	Matrix4d gx, gy, gz;
 	Matrix4d cx, cy, cz;
+
+	bool enableShader;
 	Vector3d compute(double v, double u);
 	Vector3d computeNormal(double v, double u);
+	Shader * shader;
+	GLuint skyID;
 	void setup();
 };
 
