@@ -99,7 +99,7 @@ GLuint Texture::loadTexBMP(char* file){
 	//errCheck("loadTexBMP");
 	/*  Generate 2D texture */
 	glGenTextures(1, &texture);
-	//glActiveTexture(GL_TEXTURE0 + id);
+	glActiveTexture(GL_TEXTURE0 + id);
 	id++;
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);

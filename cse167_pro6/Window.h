@@ -32,7 +32,6 @@ private :
 	static MatrixTransform * rotate_mt;
 	static BezierPatch * bp;
 	static Vector3d trackBallMapping(int x, int y);
-	static Shader * skyShader;
 	
 };
 

@@ -34,7 +34,6 @@ int Window::old_y = height / 2;
 MatrixTransform * Window::root = new MatrixTransform(Matrix4d());
 MatrixTransform * Window::ocean;
 BezierPatch * Window::bp;
-Shader * Window::skyShader;
 
 //trackball variables
 control::MOVEMENT movement = control::NONE;
@@ -134,11 +133,11 @@ void Window::init(){
 	skybox->loadFace(RIGHT, right);
 	skybox->loadFace(TOP, top);
 	*/
-	skybox->loadFace(FRONT, front);
+	//skybox->loadFace(FRONT, front);
 	t.makeTranslate(0, 7, 0);
 	MatrixTransform * sky_mt = new MatrixTransform(t);
-	sky_mt->addChild(skybox);
-	scaling_mt->addChild(sky_mt);
+	scaling_mt->addChild(skybox);
+	//scaling_mt->addChild(sky_mt);
 
 	// load shaders
 	//skyShader = new Shader("shaders/skybox.vert", "shaders/skybox.frag");

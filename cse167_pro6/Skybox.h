@@ -23,11 +23,13 @@ private :
 	GLuint faceID[6];
 	GLuint skyID;
 	double D;
+	void init();
 	void render();
 	void render1();
 	void render2();
 	void render3();
-	Shader *shader;
+	void render4();
+	Shader *shader[5];
 	GLuint vao;
 };
 

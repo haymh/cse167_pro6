@@ -1,7 +1,10 @@
 #include "glee.h"
 #include "Skybox.h"
 #include "Texture.h"
+#include "SOIL.h"
+#include <iostream>
 
+using namespace std;
 
 Skybox::Skybox(double radius){
 	D = radius;
@@ -10,6 +13,7 @@ Skybox::Skybox(double radius){
 	}
 	bs.center = Vector3d(0, 0, 0);
 	bs.radius = sqrt(D * D * 2);
+	/*
 	float points[] = {
 		-10.0f, 10.0f, -10.0f,
 		-10.0f, -10.0f, -10.0f,
@@ -65,7 +69,96 @@ Skybox::Skybox(double radius){
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
 	shader = new Shader("shaders/skybox.vert", "shaders/skybox.frag");
+	*/
+	init();
+}
+
+void Skybox::init(){
+	
+	
+	//shader[TOP] = new Shader("shaders/top.vert", "shaders/top.frag");
+	//shader[LEFT] = new Shader("shaders/left.vert", "shaders/left.frag");
+	//shader[RIGHT] = new Shader("shaders/right.vert", "shaders/right.frag");
+
+	int w, h;
+	unsigned char* image;
+	
+	glGenTextures(6, &faceID[0]);
+	GLuint e = glGetError();
+	if (e != GL_NO_ERROR)
+		cerr << " gl error 1: " << e << endl;
+
+	shader[BACK] = new Shader("shaders/back.vert", "shaders/back.frag");
+	//glActiveTexture(GL_TEXTURE1);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, faceID[BACK]);
+	image = SOIL_load_image("texture/deck/back.jpg", &w, &h, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB,
+		GL_UNSIGNED_BYTE, image);
+	SOIL_free_image_data(image);
+	glUniform1i(glGetUniformLocation(shader[BACK]->getPid(), "BackMap"), 0);
+	glDisable(GL_TEXTURE_2D);
+
+	///*
+	//glActiveTexture(GL_TEXTURE0);
+	shader[FRONT] = new Shader("shaders/front.vert", "shaders/front.frag");
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, faceID[FRONT]);
+	image = SOIL_load_image("texture/deck/front.jpg", &w, &h, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB,
+	GL_UNSIGNED_BYTE, image);
+	glUniform1i(glGetUniformLocation(shader[FRONT]->getPid(), "FrontMap"), 0);
+	SOIL_free_image_data(image);
+	//*/
+
+	
+
+	/*
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, faceID[TOP]);
+	image = SOIL_load_image("texture/deck/top.jpg", &w, &h, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB,
+	GL_UNSIGNED_BYTE, image);
+	SOIL_free_image_data(image);
+
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, faceID[LEFT]);
+	image = SOIL_load_image("texture/deck/left.jpg", &w, &h, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB,
+	GL_UNSIGNED_BYTE, image);
+	SOIL_free_image_data(image);
+
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, faceID[RIGHT]);
+	image = SOIL_load_image("texture/deck/right.jpg", &w, &h, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB,
+	GL_UNSIGNED_BYTE, image);
+	SOIL_free_image_data(image);
+	*/
+
+	
+	
+	//glUniform1i(glGetUniformLocation(shader[TOP]->getPid(), "TopMap"), 2);
+	//glUniform1i(glGetUniformLocation(shader[LEFT]->getPid(), "LeftMap"), 3);
+	//glUniform1i(glGetUniformLocation(shader[RIGHT]->getPid(), "RightMap"), 4);
+	if (e != GL_NO_ERROR){
+		cerr << " gl error 5: " << e << endl;
+		cerr << gluErrorString(e);
+	}
+	// Make sure no bytes are padded:
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	
+	// Select GL_MODULATE to mix texture with polygon color for shading:
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+	// Use bilinear interpolation:
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	e = glGetError();
+	
+		
 }
 
 void Skybox::loadFace(face f, char* filename){
@@ -74,12 +167,7 @@ void Skybox::loadFace(face f, char* filename){
 	faceID[f] = id;
 }
 
-void Skybox::loadSkybox(const char* front,
-	const char* back,
-	const char* top,
-	const char* bottom,
-	const char* left,
-	const char* right){
+void Skybox::loadSkybox(const char* front,const char* back,const char* top,const char* bottom,const char* left,const char* right){
 	GLuint texture;
 	glEnable(GL_TEXTURE_CUBE_MAP);
 	glActiveTexture(GL_TEXTURE0);
@@ -218,7 +306,7 @@ void Skybox::render2(){
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glEnable(GL_TEXTURE_2D);
-	shader->bind();
+	//shader->bind();
 	glDepthMask(GL_FALSE);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, skyID);
@@ -257,15 +345,15 @@ void Skybox::render2(){
 	glVertex3f(-D, -D, +D);
 	glVertex3f(+D, -D, +D);
 	glEnd();
-	shader->unbind();
+	//shader->unbind();
 	glEnable(GL_LIGHTING);
 	
 }
 
 void Skybox::render3(){
 	GLint texLoc;
-	shader->bind();
-	texLoc = glGetUniformLocation(shader->pid, "Texture0");
+	//shader->bind();
+	//texLoc = glGetUniformLocation(shader->pid, "Texture0");
 	glUniform1i(texLoc, 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, faceID[FRONT]);
@@ -278,11 +366,72 @@ void Skybox::render3(){
 	glTexCoord2f(1, 1); glVertex3f(+D, +D, +D);
 	glTexCoord2f(0, 1); glVertex3f(+D, +D, -D);
 	glEnd();
-	shader->unbind();
+	//shader->unbind();
+
+}
+
+void Skybox::render4(){
+	
+	float D = 1.0f;
+	/*
+	shader[RIGHT]->bind();
+	glBegin(GL_QUADS);  // right side
+	glVertex3f(+D, -D, -D);
+	glVertex3f(+D, -D, +D);
+	glVertex3f(+D, +D, +D);
+	glVertex3f(+D, +D, -D);
+	glEnd();
+	shader[RIGHT]->unbind();
+	*/
+	/*
+	shader[LEFT]->bind();
+	glBegin(GL_QUADS);  // left side
+	glVertex3f(-D, -D, +D);
+	glVertex3f(-D, -D, -D);
+	glVertex3f(-D, +D, -D);
+	glVertex3f(-D, +D, +D);
+	glEnd();
+	shader[LEFT]->unbind();
+	*/
+	shader[FRONT]->bind();
+	glBindTexture(GL_TEXTURE_2D, faceID[FRONT]);
+	///*
+	
+	glBegin(GL_QUADS);  // front
+	glVertex3f(+D, -D, +D);
+	glVertex3f(-D, -D, +D);
+	glVertex3f(-D, +D, +D);
+	glVertex3f(+D, +D, +D);
+	glEnd();
+	shader[FRONT]->unbind();
+	//*/
+	///*
+	
+
+	shader[BACK]->bind();
+	//glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, faceID[BACK]);
+	glBegin(GL_QUADS);  // back
+	glVertex3f(-D, -D, -D);
+	glVertex3f(+D, -D, -D);
+	glVertex3f(+D, +D, -D);
+	glVertex3f(-D, +D, -D);
+	glEnd();
+	shader[BACK]->unbind();
+	/*
+	shader[TOP]->bind();
+	glBegin(GL_QUADS);  // top
+	glVertex3f(-D, +D, -D);
+	glVertex3f(+D, +D, -D);
+	glVertex3f(+D, +D, +D);
+	glVertex3f(-D, +D, +D);
+	glEnd();
+	shader[TOP]->unbind();
+	*/
 
 }
 
 void Skybox::render(){
-	render3();
+	render4();
 }
 
