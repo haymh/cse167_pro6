@@ -43,6 +43,7 @@ BezierPatch::BezierPatch(Vector3d p0, Vector3d p1, Vector3d p2, Vector3d p3,
 	m = ma;
 	enableShader = false;
 	setup();
+	shader = new Shader("shaders/enviroment.vert", "shaders/environment.frag");
 }
 
 BezierPatch::BezierPatch(Vector3d * v, int xx, int yy, Material *ma){
@@ -53,6 +54,7 @@ BezierPatch::BezierPatch(Vector3d * v, int xx, int yy, Material *ma){
 	y = yy;
 	m = ma;
 	setup();
+	shader = new Shader("shaders/enviroment.vert", "shaders/environment.frag");
 }
 
 void BezierPatch::setCp(int index, Vector3d c){
@@ -76,7 +78,7 @@ void BezierPatch::setup(){
 	cy = m_bez * gy * m_bez;
 	cz = m_bez * gz * m_bez;
 
-	shader = new Shader("shaders/enviroment.vert", "shaders/environment.frag");
+	
 }
 
 void BezierPatch::setSkyID(GLuint id){
@@ -151,6 +153,12 @@ void BezierPatch::render(){
 	double du = 1 / double(x);
 	double dv = 1 / double(y);
 	/*
+	if (enableShader){
+	shader->bind();
+	glEnable(GL_TEXTURE_CUBE_MAP);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, skyID);
+	}
 	for (int i = 0; i <= y - 1; i++){
 		// figure out the two starting vertices
 		
@@ -185,7 +193,11 @@ void BezierPatch::render(){
 			glVertex3d(d[0], d[1], d[2]);
 		}
 		glEnd();
-		
+		if (enableShader){
+		glDisable(GL_TEXTURE_CUBE_MAP);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+		shader->unbind();
+	}
 		
 	}
 	*/

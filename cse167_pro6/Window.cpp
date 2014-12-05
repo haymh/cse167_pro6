@@ -35,6 +35,8 @@ MatrixTransform * Window::root = new MatrixTransform(Matrix4d());
 MatrixTransform * Window::ocean;
 BezierPatch * Window::bp;
 
+bool useShader;
+
 //trackball variables
 control::MOVEMENT movement = control::NONE;
 Vector3d lastPoint;
@@ -84,6 +86,7 @@ Vector3d cp[16];
 double time = 0.0;
 
 void Window::init(){
+	useShader = false;
 	Matrix4d t;
 	t.makeTranslate(0, -13, 0);
 	ocean = new MatrixTransform(t);
@@ -102,7 +105,7 @@ void Window::init(){
 
 	scaling_mt = new MatrixTransform(Matrix4d());
 	rotate_mt = new MatrixTransform(Matrix4d());
-	bp = new BezierPatch(cp, 100, 100, &material);
+	bp = new BezierPatch(cp, 150, 150, &material);
 	ocean->addChild(bp);
 	root->addChild(rotate_mt);
 	rotate_mt->addChild(scaling_mt);
@@ -122,7 +125,7 @@ void Window::init(){
 	scaling_mt->addChild(skybox);
 
 	bp->setSkyID(skybox->getSkyID());
-	bp->useShader(true);
+	bp->useShader(false);
 }
 
 
@@ -177,6 +180,10 @@ void Window::displayCallback()
 
 void Window::keyboardProcess(unsigned char key, int x, int y){
 	switch (key){
+	case 'e':
+		useShader = !useShader;
+		bp->useShader(useShader);
+		break;
 	case 27:
 		exit(0);
 	}
