@@ -17,7 +17,7 @@
 
 
 
-#define ROTSCALE 180.0;
+#define ROTSCALE 100.0;
 #define ZOOMSCALE 2.0;
 #define TIME_INTERVAL 0.001;
 #define WAVE_HEIGHT 3.0;
@@ -105,7 +105,7 @@ void Window::init(){
 
 	scaling_mt = new MatrixTransform(Matrix4d());
 	rotate_mt = new MatrixTransform(Matrix4d());
-	bp = new BezierPatch(cp, 150, 150, &material);
+	bp = new BezierPatch(cp, 200, 200, &material);
 	ocean->addChild(bp);
 	root->addChild(rotate_mt);
 	rotate_mt->addChild(scaling_mt);
@@ -118,7 +118,7 @@ void Window::init(){
 		mt->addChild(new Sphere(0.5, 20, 20, Vector3d(1, 0, 0), draw::SOLID, &material_cp));
 		cp_mt->addChild(mt);
 	}
-	ocean->addChild(cp_mt);
+	//ocean->addChild(cp_mt);
 
 	//loading texture
 	Skybox * skybox = new Skybox(20);
